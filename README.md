@@ -1,5 +1,5 @@
 # About
-Inspired from a logic game from `Lumosity`, I'm trying to find a solution or an approach to solve a Capacitated Vehicle Routing Problem with multiple sources and destinations.
+Inspired from a logic game from `Lumosity`, I'm trying to find a solution or an approach to solve a Capacitated Vehicle Routing Problem with Pickup and Delivery.
 
 For an illustration, check the following image:
 
