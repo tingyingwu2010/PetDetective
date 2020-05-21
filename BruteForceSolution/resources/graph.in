@@ -1,22 +1,25 @@
-M A C P CA CC CP
-M A 2
-M C 2
-M P 1
-M CA 3
-M CC 3
-M CP 3
-A C 4
-A P 3
-A CA 1
-A CC 3
-A CP 5
-C P 1
-C CA 5
-C CC 3
-C CP 3
-P CA 4
-P CC 2
-P CP 2
-CA CC 4
-CA CP 6
-CC CP 2
+Car Hedgehog Dog Cat Hedgehog_House Dog_House Cat_House
+Car
+Hedgehog Dog Cat
+Hedgehog_House Dog_House Cat_House
+Car Hedgehog 2
+Car Dog 2
+Car Cat 1
+Car Hedgehog_House 3
+Car Dog_House 3
+Car Cat_House 3
+Hedgehog Dog 4
+Hedgehog Cat 3
+Hedgehog Hedgehog_House 1
+Hedgehog Dog_House 3
+Hedgehog Cat_House 5
+Dog Cat 1
+Dog Hedgehog_House 5
+Dog Dog_House 3
+Dog Cat_House 3
+Cat Hedgehog_House 4
+Cat Dog_House 2
+Cat Cat_House 2
+Hedgehog_House Dog_House 4
+Hedgehog_House Cat_House 6
+Dog_House Cat_House 2
