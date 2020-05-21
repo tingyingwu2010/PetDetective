@@ -47,11 +47,12 @@ def compute_path(path):
     return score
 
 
-def find_shortest_route(graph, car_node, pet_nodes, house_nodes):
+def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_nodes, house_nodes):
     """ Find shortest route to deliver all the pets and return the distance and the route.
 
     :param Graph graph: graph
     :param Node car_node: car node
+    :param int car_capacity: car capacity
     :param list of Node pet_nodes: pet nodes
     :param list of Node house_nodes: house nodes
 
@@ -74,6 +75,21 @@ def find_shortest_route(graph, car_node, pet_nodes, house_nodes):
         if irregular_perm:
             continue
 
+
+        cargo = 0
+        cargo_overflow = False
+        for node_name in perm:
+            node = graph.get_node(node_name)
+            if node in pet_nodes:
+                cargo += 1
+            if node in house_nodes:
+                cargo -= 1
+            if cargo > car_capacity:
+                cargo_overflow = True
+                break
+        if cargo_overflow:
+            continue
+
         path = list(map(lambda x: graph.get_node(x), perm))
         path.insert(0, car_node)
         distance = compute_path(path)
@@ -83,6 +99,6 @@ def find_shortest_route(graph, car_node, pet_nodes, house_nodes):
 
 
 if __name__ == '__main__':
-    graph, car, pets, houses = load_graph('resources/graph_3_pets.in')
-    distance, route = find_shortest_route(graph, car, pets, houses)
+    graph, car, pets, houses = load_graph('resources/graph_5_pets.in')
+    distance, route = find_shortest_route_for_capacitated_car(graph, car, 4, pets, houses)
     print("The shortest route is {}, with a distance of {}.".format(route, distance))
