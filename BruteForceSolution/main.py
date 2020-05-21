@@ -83,6 +83,6 @@ def find_shortest_route(graph, car_node, pet_nodes, house_nodes):
 
 
 if __name__ == '__main__':
-    graph, car, pets, houses = load_graph('resources/graph.in')
+    graph, car, pets, houses = load_graph('resources/graph_3_pets.in')
     distance, route = find_shortest_route(graph, car, pets, houses)
     print("The shortest route is {}, with a distance of {}.".format(route, distance))
