@@ -33,6 +33,56 @@ def load_graph(filepath):
     return graph, car_node, pet_nodes, house_nodes
 
 
+def compute_path(path):
+    """ Compute distance for path
+
+    :param list of node path: list of nodes
+    :return int: distance
+    """
+    current_node = path.pop(0)
+    score = 0
+    for node in path:
+        score += current_node.get_weight(node)
+        current_node = node
+    return score
+
+
+def find_shortest_route(graph, car_node, pet_nodes, house_nodes):
+    """ Find shortest route to deliver all the pets and return the distance and the route.
+
+    :param Graph graph: graph
+    :param Node car_node: car node
+    :param list of Node pet_nodes: pet nodes
+    :param list of Node house_nodes: house nodes
+
+    :return int, list of Node: distance, route
+    """
+    import itertools
+
+    nodes_names = list(map(lambda x: x.name, graph.nodes))
+    permutations = list(itertools.permutations(nodes_names[1:]))
+
+    all_distances = {}
+    for perm in permutations:
+        irregular_perm = False
+        for index in range(0, len(pet_nodes)):
+            p_node = pet_nodes[index]
+            h_node = house_nodes[index]
+            if perm.index(p_node.name) > perm.index(h_node.name):
+                irregular_perm = True
+                break
+        if irregular_perm:
+            continue
+
+        path = list(map(lambda x: graph.get_node(x), perm))
+        path.insert(0, car_node)
+        distance = compute_path(path)
+        all_distances[distance] = path
+    min_distance = min(all_distances.keys())
+    return min_distance, all_distances[min_distance]
+
+
 if __name__ == '__main__':
     graph, car, pets, houses = load_graph('resources/graph.in')
-    print(graph, car, pets, houses)
+    distance, route = find_shortest_route(graph, car, pets, houses)
+    print("The shortest route is {}, with a distance of {}.".format(route, distance))
