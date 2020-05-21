@@ -10,6 +10,9 @@ class Node:
         self.name = name
         self.connections = {}
 
+    def __repr__(self):
+        return self.name
+
     def add_connection_to(self, node, distance):
         """Add connection to another node.
 
@@ -29,6 +32,3 @@ class Node:
             int: distance to the node
         """
         return self.connections[node.name]
-
-    def __repr__(self):
-        return self.name
