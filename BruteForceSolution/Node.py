@@ -17,7 +17,7 @@ class Node:
             node (Node): the node to be connected to
             distance (int): the distance to the node
         """
-        self.connections[node] = distance
+        self.connections[node.name] = distance
 
     def get_distance_to(self, node):
         """Get distance to node.
@@ -28,7 +28,7 @@ class Node:
         Returns:
             int: distance to the node
         """
-        return self.connections[node]
+        return self.connections[node.name]
 
     def __repr__(self):
         return self.name
