@@ -47,6 +47,31 @@ def compute_path(path):
     return score
 
 
+def is_route_valid(pet_nodes, house_nodes, route, car_capacity):
+    """ Check if route is valid and return the boolean result.
+    There are 2 conditions for a route to be valid:
+    - no cargo overflow - car capacity is not exceeded
+    - nodes order are consecutive - a pet node is traversed before pet's house node
+
+    :param pet_nodes:
+    :param house_nodes:
+    :param route:
+    :param car_capacity:
+    :return:
+    """
+    cargo = 0
+    for node in route:
+        if node in pet_nodes:
+            cargo += 1
+        if node in house_nodes:
+            cargo -= 1
+        if cargo > car_capacity:    # Cargo Overflow
+            return False
+        if cargo < 0:               # Route is not consecutive
+            return False
+    return True
+
+
 def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_nodes, house_nodes):
     """ Find shortest route to deliver all the pets and return the distance and the route.
 
@@ -59,41 +84,17 @@ def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_n
     :return int, list of Node: distance, route
     """
     import itertools
-
-    nodes_names = list(map(lambda x: x.name, graph.nodes))
-    permutations = list(itertools.permutations(nodes_names[1:]))
+    permutations = list(itertools.permutations(graph.nodes[1:]))
 
     all_distances = {}
     for perm in permutations:
-        irregular_perm = False
-        for index in range(0, len(pet_nodes)):
-            p_node = pet_nodes[index]
-            h_node = house_nodes[index]
-            if perm.index(p_node.name) > perm.index(h_node.name):
-                irregular_perm = True
-                break
-        if irregular_perm:
+        route = list(perm)
+        if not is_route_valid(pet_nodes, house_nodes, route, car_capacity):
             continue
 
-
-        cargo = 0
-        cargo_overflow = False
-        for node_name in perm:
-            node = graph.get_node(node_name)
-            if node in pet_nodes:
-                cargo += 1
-            if node in house_nodes:
-                cargo -= 1
-            if cargo > car_capacity:
-                cargo_overflow = True
-                break
-        if cargo_overflow:
-            continue
-
-        path = list(map(lambda x: graph.get_node(x), perm))
-        path.insert(0, car_node)
-        distance = compute_path(path)
-        all_distances[distance] = path
+        route.insert(0, car_node)
+        distance = compute_path(route)
+        all_distances[distance] = route
     min_distance = min(all_distances.keys())
     return min_distance, all_distances[min_distance]
 
