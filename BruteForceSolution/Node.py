@@ -3,10 +3,10 @@ class Node:
         self.name = name
         self.connections = {}
 
-    def add_connection(self, node, weight):
-        self.connections[node] = weight
+    def add_connection(self, node, distance):
+        self.connections[node] = distance
 
-    def get_weight(self, node):
+    def get_distance_to(self, node):
         return self.connections[node]
 
     def __repr__(self):

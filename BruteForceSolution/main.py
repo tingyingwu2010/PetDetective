@@ -42,7 +42,7 @@ def compute_path(path):
     current_node = path.pop(0)
     score = 0
     for node in path:
-        score += current_node.get_weight(node)
+        score += current_node.get_distance_to(node)
         current_node = node
     return score
 
