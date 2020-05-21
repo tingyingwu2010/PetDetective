@@ -100,6 +100,6 @@ def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_n
 
 
 if __name__ == '__main__':
-    graph, car, pets, houses = load_graph('resources/graph_5_pets.in')
+    graph, car, pets, houses = load_graph('resources/map_5_pets.in')
     distance, route = find_shortest_route_for_capacitated_car(graph, car, 4, pets, houses)
     print("The shortest route is {}, with a distance of {}.".format(route, distance))
