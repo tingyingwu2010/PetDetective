@@ -3,7 +3,7 @@ class Node:
         self.name = name
         self.connections = {}
 
-    def add_connection(self, node, distance):
+    def add_connection_to(self, node, distance):
         self.connections[node] = distance
 
     def get_distance_to(self, node):

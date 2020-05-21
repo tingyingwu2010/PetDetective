@@ -28,8 +28,8 @@ def load_graph(filepath):
         node_destination = graph.get_node(edge_repr[1])
         weight = int(edge_repr[2])
 
-        node_source.add_connection(node_destination, weight)
-        node_destination.add_connection(node_source, weight)
+        node_source.add_connection_to(node_destination, weight)
+        node_destination.add_connection_to(node_source, weight)
     return graph, car_node, pet_nodes, house_nodes
 
 
