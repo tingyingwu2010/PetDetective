@@ -1,6 +1,5 @@
 from MapFactory import MapFactory
 from Map import Map
-from Node import Node
 from route import *
 
 
