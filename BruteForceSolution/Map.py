@@ -3,6 +3,11 @@ from Node import Node
 
 class Map:
     def __init__(self, nodes):
+        """Initialize a Map.
+
+        Parameters:
+            nodes (list of Node): the list of nodes to initialize the map with
+        """
         self.nodes = nodes
         self.car_node = None
         self.pet_nodes = []
