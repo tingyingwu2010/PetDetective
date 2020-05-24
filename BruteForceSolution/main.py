@@ -1,9 +1,9 @@
-from Graph import Graph
+from Map import Map
 from Node import Node
 
 
-def load_graph(filepath):
-    """ Load graph from file and returns the graph and its nodes.
+def load_map(filepath):
+    """Load map from file.
 
     :param str filepath: file path
     :return graph, node, list of node, list of node: graph, car node, list of pet nodes, list of house nodes
@@ -13,24 +13,24 @@ def load_graph(filepath):
 
     all_nodes_name = file_content.pop(0).split(" ")
     all_nodes = list(map(lambda x: Node(x), all_nodes_name))
-    graph = Graph(all_nodes)
+    m = Map(all_nodes)
 
     car_node_name = file_content.pop(0)
-    car_node = graph.get_node(car_node_name)
+    car_node = m.get_node(car_node_name)
     pet_nodes_name = file_content.pop(0).split(" ")
-    pet_nodes = list(map(lambda x: graph.get_node(x), pet_nodes_name))
+    pet_nodes = list(map(lambda x: m.get_node(x), pet_nodes_name))
     house_nodes_names = file_content.pop(0).split(" ")
-    house_nodes = list(map(lambda x: graph.get_node(x), house_nodes_names))
+    house_nodes = list(map(lambda x: m.get_node(x), house_nodes_names))
 
     while file_content:
         edge_repr = file_content.pop(0).split(" ")
-        node_source = graph.get_node(edge_repr[0])
-        node_destination = graph.get_node(edge_repr[1])
+        node_source = m.get_node(edge_repr[0])
+        node_destination = m.get_node(edge_repr[1])
         weight = int(edge_repr[2])
 
         node_source.add_connection_to(node_destination, weight)
         node_destination.add_connection_to(node_source, weight)
-    return graph, car_node, pet_nodes, house_nodes
+    return m, car_node, pet_nodes, house_nodes
 
 
 def compute_path(path):
@@ -75,7 +75,7 @@ def is_route_valid(pet_nodes, house_nodes, route, car_capacity):
 def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_nodes, house_nodes):
     """ Find shortest route to deliver all the pets and return the distance and the route.
 
-    :param Graph graph: graph
+    :param Map graph: graph
     :param Node car_node: car node
     :param int car_capacity: car capacity
     :param list of Node pet_nodes: pet nodes
@@ -100,6 +100,6 @@ def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_n
 
 
 if __name__ == '__main__':
-    graph, car, pets, houses = load_graph('resources/map_5_pets.in')
+    graph, car, pets, houses = load_map('resources/map_5_pets.in')
     distance, route = find_shortest_route_for_capacitated_car(graph, car, 4, pets, houses)
     print("The shortest route is {}, with a distance of {}.".format(route, distance))
