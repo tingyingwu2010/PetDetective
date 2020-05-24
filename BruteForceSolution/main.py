@@ -34,15 +34,27 @@ def is_route_valid(the_map, route, car_capacity):
     Returns:
         True if the route is valid, False if the route is invalid
     """
+    return is_cargo_kept_under_limit(the_map, route, car_capacity)
+
+
+def is_cargo_kept_under_limit(the_map, route, car_capacity):
+    """Check if cargo is kept under limit on route.
+
+    Parameters:
+        the_map (Map): the map that holds the route
+        route (list of Node): a list of nodes representing the route
+        car_capacity (int): the cargo capacity of the car
+
+    Returns:
+        True if cargo is kept under limit, False if not
+    """
     cargo = 0
     for node in route:
         if node in the_map.pet_nodes:
             cargo += 1
         if node in the_map.house_nodes:
             cargo -= 1
-        if cargo > car_capacity:    # Cargo Overflow
-            return False
-        if cargo < 0:               # Route is not consecutive
+        if cargo > car_capacity:  # Cargo Overflow
             return False
     return True
 
