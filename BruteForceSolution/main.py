@@ -16,16 +16,16 @@ def load_map(filepath):
     m = Map(all_nodes)
 
     car_node_name = file_content.pop(0)
-    car_node = m.get_node(car_node_name)
+    car_node = m.get_node_by_name(car_node_name)
     pet_nodes_name = file_content.pop(0).split(" ")
-    pet_nodes = list(map(lambda x: m.get_node(x), pet_nodes_name))
+    pet_nodes = list(map(lambda x: m.get_node_by_name(x), pet_nodes_name))
     house_nodes_names = file_content.pop(0).split(" ")
-    house_nodes = list(map(lambda x: m.get_node(x), house_nodes_names))
+    house_nodes = list(map(lambda x: m.get_node_by_name(x), house_nodes_names))
 
     while file_content:
         edge_repr = file_content.pop(0).split(" ")
-        node_source = m.get_node(edge_repr[0])
-        node_destination = m.get_node(edge_repr[1])
+        node_source = m.get_node_by_name(edge_repr[0])
+        node_destination = m.get_node_by_name(edge_repr[1])
         weight = int(edge_repr[2])
 
         node_source.add_connection_to(node_destination, weight)
