@@ -7,7 +7,7 @@ def get_distance_for_route(route):
     """Compute distance for route
 
     Parameters:
-        route (list of Node): a list of nodes
+        route (list of Node): a list of nodes representing the route
 
     Returns:
         int: the distance of the route
@@ -45,16 +45,16 @@ def is_route_valid(pet_nodes, house_nodes, route, car_capacity):
     return True
 
 
-def find_shortest_route_for_capacitated_car(the_map, car_node, car_capacity, pet_nodes, house_nodes):
-    """ Find shortest route to deliver all the pets and return the distance and the route.
+def find_shortest_route_for_capacitated_car(the_map, car_capacity):
+    """Find shortest route to deliver all the pets and return the distance and the route.
 
-    :param Map the_map: map
-    :param Node car_node: car node
-    :param int car_capacity: car capacity
-    :param list of Node pet_nodes: pet nodes
-    :param list of Node house_nodes: house nodes
+    Parameters:
+        the_map (Map): the map
+        car_capacity (int): the cargo capacity of the car
 
-    :return int, list of Node: distance, route
+    Returns:
+        int: the shortest route distance
+        list of nodes: the shortest route
     """
     import itertools
     permutations = list(itertools.permutations(the_map.nodes[1:]))
@@ -62,10 +62,10 @@ def find_shortest_route_for_capacitated_car(the_map, car_node, car_capacity, pet
     all_distances = {}
     for perm in permutations:
         route = list(perm)
-        if not is_route_valid(pet_nodes, house_nodes, route, car_capacity):
+        if not is_route_valid(the_map.pet_nodes, the_map.house_nodes, route, car_capacity):
             continue
 
-        route.insert(0, car_node)
+        route.insert(0, the_map.car_node)
         distance = get_distance_for_route(route)
         all_distances[distance] = route
     min_distance = min(all_distances.keys())
@@ -73,6 +73,6 @@ def find_shortest_route_for_capacitated_car(the_map, car_node, car_capacity, pet
 
 
 if __name__ == '__main__':
-    m = MapFactory.create_map_from_file('resources/map_5_pets.in')
-    distance, route = find_shortest_route_for_capacitated_car(m, m.car_node, 4, m.pet_nodes, m.house_nodes)
-    print("The shortest route is {}, with a distance of {}.".format(route, distance))
+    m = MapFactory.create_map_from_file('resources/map_3_pets.in')
+    dist, r = find_shortest_route_for_capacitated_car(m, 4)
+    print("The shortest route is {}, with a distance of {}.".format(r, dist))
