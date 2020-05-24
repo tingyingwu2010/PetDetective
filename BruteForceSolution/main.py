@@ -1,36 +1,6 @@
+from MapFactory import MapFactory
 from Map import Map
 from Node import Node
-
-
-def load_map(filepath):
-    """Load map from file.
-
-    :param str filepath: file path
-    :return graph, node, list of node, list of node: graph, car node, list of pet nodes, list of house nodes
-    """
-    from utilities import FileUtilities
-    file_content = FileUtilities.get_sanitized_content_from_file(filepath)
-
-    all_nodes_name = file_content.pop(0).split(" ")
-    all_nodes = list(map(lambda x: Node(x), all_nodes_name))
-    m = Map(all_nodes)
-
-    car_node_name = file_content.pop(0)
-    car_node = m.get_node_by_name(car_node_name)
-    pet_nodes_name = file_content.pop(0).split(" ")
-    pet_nodes = list(map(lambda x: m.get_node_by_name(x), pet_nodes_name))
-    house_nodes_names = file_content.pop(0).split(" ")
-    house_nodes = list(map(lambda x: m.get_node_by_name(x), house_nodes_names))
-
-    while file_content:
-        edge_repr = file_content.pop(0).split(" ")
-        node_source = m.get_node_by_name(edge_repr[0])
-        node_destination = m.get_node_by_name(edge_repr[1])
-        weight = int(edge_repr[2])
-
-        node_source.add_connection_to(node_destination, weight)
-        node_destination.add_connection_to(node_source, weight)
-    return m, car_node, pet_nodes, house_nodes
 
 
 def compute_path(path):
@@ -72,10 +42,10 @@ def is_route_valid(pet_nodes, house_nodes, route, car_capacity):
     return True
 
 
-def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_nodes, house_nodes):
+def find_shortest_route_for_capacitated_car(the_map, car_node, car_capacity, pet_nodes, house_nodes):
     """ Find shortest route to deliver all the pets and return the distance and the route.
 
-    :param Map graph: graph
+    :param Map the_map: map
     :param Node car_node: car node
     :param int car_capacity: car capacity
     :param list of Node pet_nodes: pet nodes
@@ -84,7 +54,7 @@ def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_n
     :return int, list of Node: distance, route
     """
     import itertools
-    permutations = list(itertools.permutations(graph.nodes[1:]))
+    permutations = list(itertools.permutations(the_map.nodes[1:]))
 
     all_distances = {}
     for perm in permutations:
@@ -100,6 +70,6 @@ def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_n
 
 
 if __name__ == '__main__':
-    graph, car, pets, houses = load_map('resources/map_5_pets.in')
-    distance, route = find_shortest_route_for_capacitated_car(graph, car, 4, pets, houses)
+    m = MapFactory.create_map_from_file('resources/map_5_pets.in')
+    distance, route = find_shortest_route_for_capacitated_car(m, m.car_node, 4, m.pet_nodes, m.house_nodes)
     print("The shortest route is {}, with a distance of {}.".format(route, distance))
