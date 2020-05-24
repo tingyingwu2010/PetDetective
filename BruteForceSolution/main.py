@@ -3,18 +3,21 @@ from Map import Map
 from Node import Node
 
 
-def compute_path(path):
-    """ Compute distance for path
+def get_distance_for_route(route):
+    """Compute distance for route
 
-    :param list of node path: list of nodes
-    :return int: distance
+    Parameters:
+        route (list of Node): a list of nodes
+
+    Returns:
+        int: the distance of the route
     """
-    current_node = path.pop(0)
-    score = 0
-    for node in path:
-        score += current_node.get_distance_to(node)
-        current_node = node
-    return score
+    current_node = route.pop(0)
+    d = 0
+    for n in route:
+        d += current_node.get_distance_to(n)
+        current_node = n
+    return d
 
 
 def is_route_valid(pet_nodes, house_nodes, route, car_capacity):
@@ -63,7 +66,7 @@ def find_shortest_route_for_capacitated_car(the_map, car_node, car_capacity, pet
             continue
 
         route.insert(0, car_node)
-        distance = compute_path(route)
+        distance = get_distance_for_route(route)
         all_distances[distance] = route
     min_distance = min(all_distances.keys())
     return min_distance, all_distances[min_distance]
