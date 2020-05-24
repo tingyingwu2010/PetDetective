@@ -23,8 +23,8 @@ def get_distance_for_route(route):
 def is_route_valid(the_map, route, car_capacity):
     """Check if route is valid and return the boolean result.
     There are 2 conditions for a route to be valid:
-    - no cargo overflow - car capacity is not exceeded
-    - route nodes order consecutivity is valid - a pet node is traversed before pet's house node
+    - no cargo overflow - car capacity should not be exceeded
+    - route nodes order consecutivity is valid - a pet node should be traversed before pet's house node
 
     Parameters:
         the_map (Map): the map that holds the route
@@ -32,7 +32,7 @@ def is_route_valid(the_map, route, car_capacity):
         car_capacity (int): the cargo capacity of the car
 
     Returns:
-        True if the route is valid, False if the route is not valid
+        True if the route is valid, False if the route is invalid
     """
     cargo = 0
     for node in route:
