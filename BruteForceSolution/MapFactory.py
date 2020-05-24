@@ -16,6 +16,7 @@ class MapFactory:
         from utilities import FileUtilities
         file_content = FileUtilities.get_sanitized_content_from_file(filepath)
 
+        all_nodes = file_content.pop(0)
         car_node_name = file_content.pop(0)
         pet_nodes_name = file_content.pop(0).split(" ")
         house_nodes_names = file_content.pop(0).split(" ")
