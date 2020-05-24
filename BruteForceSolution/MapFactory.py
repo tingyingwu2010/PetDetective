@@ -45,7 +45,7 @@ class MapFactory:
         Returns:
             Map: map
         """
-        node_names = list(car_node_name)
+        node_names = list([car_node_name])
         node_names.extend(pet_node_names)
         node_names.extend(house_node_names)
         nodes = list(map(lambda x: Node(x), node_names))
