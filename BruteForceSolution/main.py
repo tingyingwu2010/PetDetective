@@ -1,104 +1,80 @@
-from Graph import Graph
+from MapFactory import MapFactory
+from Map import Map
 from Node import Node
 
 
-def load_graph(filepath):
-    """ Load graph from file and returns the graph and its nodes.
+def get_distance_for_route(route):
+    """Compute distance for route
 
-    :param str filepath: file path
-    :return graph, node, list of node, list of node: graph, car node, list of pet nodes, list of house nodes
+    Parameters:
+        route (list of Node): a list of nodes representing the route
+
+    Returns:
+        int: the distance of the route
     """
-    from utilities import FileUtilities
-    file_content = FileUtilities.get_sanitized_content_from_file(filepath)
-
-    all_nodes_name = file_content.pop(0).split(" ")
-    all_nodes = list(map(lambda x: Node(x), all_nodes_name))
-    graph = Graph(all_nodes)
-
-    car_node_name = file_content.pop(0)
-    car_node = graph.get_node(car_node_name)
-    pet_nodes_name = file_content.pop(0).split(" ")
-    pet_nodes = list(map(lambda x: graph.get_node(x), pet_nodes_name))
-    house_nodes_names = file_content.pop(0).split(" ")
-    house_nodes = list(map(lambda x: graph.get_node(x), house_nodes_names))
-
-    while file_content:
-        edge_repr = file_content.pop(0).split(" ")
-        node_source = graph.get_node(edge_repr[0])
-        node_destination = graph.get_node(edge_repr[1])
-        weight = int(edge_repr[2])
-
-        node_source.add_connection(node_destination, weight)
-        node_destination.add_connection(node_source, weight)
-    return graph, car_node, pet_nodes, house_nodes
+    current_node = route.pop(0)
+    d = 0
+    for n in route:
+        d += current_node.get_distance_to(n)
+        current_node = n
+    return d
 
 
-def compute_path(path):
-    """ Compute distance for path
+def is_route_valid(the_map, route, car_capacity):
+    """Check if route is valid and return the boolean result.
+    There are 2 conditions for a route to be valid:
+    - no cargo overflow - car capacity is not exceeded
+    - route nodes order consecutivity is valid - a pet node is traversed before pet's house node
 
-    :param list of node path: list of nodes
-    :return int: distance
+    Parameters:
+        the_map (Map): the map that holds the route
+        route (list of Node): a list of nodes representing the route
+        car_capacity (int): the cargo capacity of the car
+
+    Returns:
+        True if the route is valid, False if the route is not valid
     """
-    current_node = path.pop(0)
-    score = 0
-    for node in path:
-        score += current_node.get_weight(node)
-        current_node = node
-    return score
+    cargo = 0
+    for node in route:
+        if node in the_map.pet_nodes:
+            cargo += 1
+        if node in the_map.house_nodes:
+            cargo -= 1
+        if cargo > car_capacity:    # Cargo Overflow
+            return False
+        if cargo < 0:               # Route is not consecutive
+            return False
+    return True
 
 
-def find_shortest_route_for_capacitated_car(graph, car_node, car_capacity, pet_nodes, house_nodes):
-    """ Find shortest route to deliver all the pets and return the distance and the route.
+def find_shortest_route_for_capacitated_car(the_map, car_capacity):
+    """Find shortest route to deliver all the pets and return the distance and the route.
 
-    :param Graph graph: graph
-    :param Node car_node: car node
-    :param int car_capacity: car capacity
-    :param list of Node pet_nodes: pet nodes
-    :param list of Node house_nodes: house nodes
+    Parameters:
+        the_map (Map): the map
+        car_capacity (int): the cargo capacity of the car
 
-    :return int, list of Node: distance, route
+    Returns:
+        int: the shortest route distance
+        list of nodes: the shortest route
     """
     import itertools
-
-    nodes_names = list(map(lambda x: x.name, graph.nodes))
-    permutations = list(itertools.permutations(nodes_names[1:]))
+    permutations = list(itertools.permutations(the_map.nodes[1:]))
 
     all_distances = {}
     for perm in permutations:
-        irregular_perm = False
-        for index in range(0, len(pet_nodes)):
-            p_node = pet_nodes[index]
-            h_node = house_nodes[index]
-            if perm.index(p_node.name) > perm.index(h_node.name):
-                irregular_perm = True
-                break
-        if irregular_perm:
+        route = list(perm)
+        if not is_route_valid(the_map, route, car_capacity):
             continue
 
-
-        cargo = 0
-        cargo_overflow = False
-        for node_name in perm:
-            node = graph.get_node(node_name)
-            if node in pet_nodes:
-                cargo += 1
-            if node in house_nodes:
-                cargo -= 1
-            if cargo > car_capacity:
-                cargo_overflow = True
-                break
-        if cargo_overflow:
-            continue
-
-        path = list(map(lambda x: graph.get_node(x), perm))
-        path.insert(0, car_node)
-        distance = compute_path(path)
-        all_distances[distance] = path
+        route.insert(0, the_map.car_node)
+        distance = get_distance_for_route(route)
+        all_distances[distance] = route
     min_distance = min(all_distances.keys())
     return min_distance, all_distances[min_distance]
 
 
 if __name__ == '__main__':
-    graph, car, pets, houses = load_graph('resources/graph_5_pets.in')
-    distance, route = find_shortest_route_for_capacitated_car(graph, car, 4, pets, houses)
-    print("The shortest route is {}, with a distance of {}.".format(route, distance))
+    m = MapFactory.create_map_from_file('resources/map_3_pets.in')
+    dist, r = find_shortest_route_for_capacitated_car(m, 4)
+    print("The shortest route is {}, with a distance of {}.".format(r, dist))
