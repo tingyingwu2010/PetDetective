@@ -7,6 +7,11 @@ class Node:
     """
 
     def __init__(self, name):
+        """Initialize a Node.
+
+        Parameters:
+            name (str): the name of the node
+        """
         self.name = name
         self.connections = {}
 
