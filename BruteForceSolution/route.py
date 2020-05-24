@@ -58,3 +58,20 @@ def is_nodes_order_consecutive(the_map, route):
         if route.index(p_node) > route.index(h_node):
             return False            # Nodes order in route is not consecutive
     return True
+
+
+def get_distance_for_route(route):
+    """Compute distance for route
+
+    Parameters:
+        route (list of Node): a list of nodes representing the route
+
+    Returns:
+        int: the distance of the route
+    """
+    current_node = route.pop(0)
+    d = 0
+    for n in route:
+        d += current_node.get_distance_to(n)
+        current_node = n
+    return d

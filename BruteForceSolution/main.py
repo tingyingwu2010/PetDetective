@@ -4,23 +4,6 @@ from Node import Node
 from route import *
 
 
-def get_distance_for_route(route):
-    """Compute distance for route
-
-    Parameters:
-        route (list of Node): a list of nodes representing the route
-
-    Returns:
-        int: the distance of the route
-    """
-    current_node = route.pop(0)
-    d = 0
-    for n in route:
-        d += current_node.get_distance_to(n)
-        current_node = n
-    return d
-
-
 def find_shortest_route_for_capacitated_car(the_map, car_capacity):
     """Find shortest route to deliver all the pets and return the distance and the route.
     The method is optimized to use only half of the permutations.

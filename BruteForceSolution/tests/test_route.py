@@ -117,3 +117,15 @@ class RouteTests(unittest.TestCase):
 
         # Then
         self.assertEqual(is_valid, False)
+
+    def test_get_distance_for_route(self):
+        # Given
+        the_map = MapFactory.create_map_from_file('../resources/map_2_pets.in')
+        route_node_names = ['Car', 'Cat', 'Dog', 'Cat_House', 'Dog_House']
+        route = list(map(lambda x: the_map.get_node_by_name(x), route_node_names))
+
+        # When
+        distance = get_distance_for_route(route)
+
+        # Then
+        self.assertEqual(distance, 7)
