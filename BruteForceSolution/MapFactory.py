@@ -16,6 +16,7 @@ class MapFactory:
         from utilities import FileUtilities
         file_content = FileUtilities.get_sanitized_content_from_file(filepath)
 
+        all_nodes = file_content.pop(0)
         car_node_name = file_content.pop(0)
         pet_nodes_name = file_content.pop(0).split(" ")
         house_nodes_names = file_content.pop(0).split(" ")
@@ -45,7 +46,7 @@ class MapFactory:
         Returns:
             Map: map
         """
-        node_names = list(car_node_name)
+        node_names = list([car_node_name])
         node_names.extend(pet_node_names)
         node_names.extend(house_node_names)
         nodes = list(map(lambda x: Node(x), node_names))
